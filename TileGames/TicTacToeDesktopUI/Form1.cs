@@ -1,27 +1,40 @@
-﻿using System.Drawing;
+﻿using GameLogicPlugin;
+using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System;
+using System.Collections.Generic;
+using TicTacToeSimpleGameLogic;
 
 namespace TicTacToeDesktopUI
 {
     public partial class Form1 : Form
     {
+        public IGameLogic _gameLogic = new Class1();
+        private Dictionary<int, Button> playerOptions = new Dictionary<int, Button>();
         public Form1()
         {
             InitializeComponent();
             flowLayoutPanel1.BackColor = Color.DarkGray;
-            for (int i = 0; i < 9; i++)
+            int totalCells = _gameLogic.TileWidth * _gameLogic.TileHeight;
+            for (int i = 0; i < totalCells; i++)
             {
-                flowLayoutPanel1.Controls.Add(CreateButton(i, ""));
-            }
+                var button = CreateButton(i, "");
+                playerOptions.Add(i, button);
+                flowLayoutPanel1.Controls.Add(button);
+            } 
+            _gameLogic = new Class1();
+            _gameLogic.AddPlayer(new Player { PlayerIndex = 0, PieceKey = "O" });
+            _gameLogic.AddPlayer(new Player { PlayerIndex = 1, PieceKey = "X" });
         }
-        static Button CreateButton(int index, string defaultValue)
+        Button CreateButton(int index, string defaultValue)
         {
             var button = new Button();
-            button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button.Location = new System.Drawing.Point(15, 15);
-            button.Margin = new System.Windows.Forms.Padding(15);
+            button.FlatStyle = FlatStyle.Flat;
+            button.Location = new Point(15, 15);
+            button.Margin = new Padding(15);
             button.Name = index.ToString();
-            button.Size = new System.Drawing.Size(75, 75);
+            button.Size = new Size(75, 75);
             button.TabIndex = 0;
             button.TabStop = false;
             button.Text = defaultValue;
@@ -31,13 +44,73 @@ namespace TicTacToeDesktopUI
             return button;
         }
 
-        private static void ButtonClicked(object sender, System.EventArgs e)
+        private void ButtonClicked(object sender, System.EventArgs e)
         {
             var button = sender as Button;
             if (button == null)
                 return;
+            if (_gameLogic.IsOver())
+            {
+                MessageBox.Show("The game is over fool!", "Game State");
+                return;
+            }
 
-            button.Text = "X";
+            UpdateButtonState(false);
+
+            Task.Factory.StartNew(name => {
+                var move = CreateMove(name as string, _gameLogic.GetCurrentPlayer());
+                if (!_gameLogic.IsMoveValid(move))
+                    return;
+                _gameLogic.Move(move);
+                UpdateButtonText(move);
+                var boardState = _gameLogic.GetBoardState();
+                switch (boardState)
+                {
+                    case BoardState.WON:break;
+                    case BoardState.TIE:break;
+                    case BoardState.CONTINUE:break;
+                }
+            }, button.Name).ContinueWith(task => UpdateButtonState(true));
         }
+        private void UpdateButtonState(bool enabled)
+        {
+            if (playerOptions[0].InvokeRequired)
+            {
+                Invoke(new OnVoidMethod<bool>(UpdateButtonState), new object[] { enabled });
+            }
+            else
+            {
+                foreach (var button in playerOptions.Values) button.Enabled = enabled;
+            }
+        }
+        private IMove<IPlayer> CreateMove(string buttonName, IPlayer player)
+        {
+            var buttonIndex = int.Parse(buttonName);
+            return new Move
+            {
+                RowIndex = buttonIndex / _gameLogic.TileWidth,
+                ColumnIndex = buttonIndex % _gameLogic.TileHeight,
+                Player = player
+            };
+        }
+        private void UpdateButtonText(IMove<IPlayer> move)
+        {
+            var buttonInQuestion = playerOptions[move.RowIndex * _gameLogic.TileWidth + move.ColumnIndex];
+            if (buttonInQuestion.InvokeRequired)
+            {
+                Invoke(new OnVoidMethod<IMove<IPlayer>>(UpdateButtonText), new object[] { move });
+                return;
+            }
+            buttonInQuestion.Text = move.Player.PieceKey;
+        }
+        private delegate void OnVoidMethod<T>(T param1);
+    }
+    public class Move : IMove<IPlayer>
+    {
+        public int ColumnIndex { get; set; }
+
+        public IPlayer Player { get; set; }
+
+        public int RowIndex { get; set; }
     }
 }

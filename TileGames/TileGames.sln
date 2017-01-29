@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToeDesktopUI", "TicTacToeDesktopUI\TicTacToeDesktopUI.csproj", "{E6A72B03-D71E-4828-812D-48035F91659C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogicPlugin", "GameLogicPlugin\GameLogicPlugin.csproj", "{B60E2081-5114-43BC-9AA2-AF36BA79934F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToeSimpleGameLogic", "TicTacToeSimpleGameLogic\TicTacToeSimpleGameLogic.csproj", "{55DCBC98-4E6A-4036-BD3A-EBB201B1FB23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{E6A72B03-D71E-4828-812D-48035F91659C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6A72B03-D71E-4828-812D-48035F91659C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6A72B03-D71E-4828-812D-48035F91659C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B60E2081-5114-43BC-9AA2-AF36BA79934F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B60E2081-5114-43BC-9AA2-AF36BA79934F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B60E2081-5114-43BC-9AA2-AF36BA79934F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B60E2081-5114-43BC-9AA2-AF36BA79934F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55DCBC98-4E6A-4036-BD3A-EBB201B1FB23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55DCBC98-4E6A-4036-BD3A-EBB201B1FB23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55DCBC98-4E6A-4036-BD3A-EBB201B1FB23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55DCBC98-4E6A-4036-BD3A-EBB201B1FB23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
