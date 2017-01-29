@@ -42,9 +42,9 @@ namespace TicTacToeSimpleGameLogic
         private List<IMove<IPlayer>> moves = new List<IMove<IPlayer>>();
         private IPlayerLogic players = new PlayerLogic();
         private bool gameOver = false;
-        public int TileHeight => 3;
+        public int TileHeight => 4;
 
-        public int TileWidth => 3;
+        public int TileWidth => 4;
 
         public void AddPlayer(IPlayer player)
         {
@@ -55,13 +55,26 @@ namespace TicTacToeSimpleGameLogic
         {
             if (moves.Count < 5)
                 return BoardState.CONTINUE;
-            var m = moves.Where(x => x.Player == players.PreviousPlayer());
-            for (int i = 0; i < 3; i++)
+            var m = moves.Where(x => x.Player == players.PreviousPlayer()).ToList();
+
+            if (TileWidth == TileHeight && (
+                m.Count(x => x.RowIndex == x.ColumnIndex) == TileWidth ||
+                m.Count(x => x.RowIndex + x.ColumnIndex == 2) == TileHeight))
             {
-                if (m.Count(x => x.RowIndex == i) == 3 ||
-                    m.Count(x => x.ColumnIndex == i) == 3 ||
-                    m.Count(x => x.RowIndex == x.ColumnIndex) == 3 ||
-                    m.Count(x => x.RowIndex + x.ColumnIndex == 2) == 3)
+                gameOver = true;
+                return BoardState.WON;
+            }
+            for (int i = 0; i < TileWidth; i++)
+            {
+                if (m.Count(x => x.RowIndex == i) == TileWidth)
+                {
+                    gameOver = true;
+                    return BoardState.WON;
+                }
+            }
+            for (int i = 0; i < TileHeight; i++)
+            {
+                if (m.Count(x => x.ColumnIndex == i) == TileHeight)
                 {
                     gameOver = true;
                     return BoardState.WON;

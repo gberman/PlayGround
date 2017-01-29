@@ -26,6 +26,7 @@ namespace TicTacToeDesktopUI
             _gameLogic = new Class1();
             _gameLogic.AddPlayer(new Player { PlayerIndex = 0, PieceKey = "O" });
             _gameLogic.AddPlayer(new Player { PlayerIndex = 1, PieceKey = "X" });
+            Size = new Size(20 + _gameLogic.TileWidth * 100, 20 + _gameLogic.TileHeight * 100);
         }
         Button CreateButton(int index, string defaultValue)
         {
@@ -89,7 +90,7 @@ namespace TicTacToeDesktopUI
             return new Move
             {
                 RowIndex = buttonIndex / _gameLogic.TileWidth,
-                ColumnIndex = buttonIndex % _gameLogic.TileHeight,
+                ColumnIndex = buttonIndex % _gameLogic.TileWidth,
                 Player = player
             };
         }
