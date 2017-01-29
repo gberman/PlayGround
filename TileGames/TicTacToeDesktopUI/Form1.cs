@@ -1,16 +1,15 @@
 ﻿using GameLogicPlugin;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System;
-using System.Collections.Generic;
 using TicTacToeSimpleGameLogic;
 
 namespace TicTacToeDesktopUI
 {
     public partial class Form1 : Form
     {
-        public IGameLogic _gameLogic = new Class1();
+        public IGameLogic _gameLogic = new GameLogic();
         private Dictionary<int, Button> playerOptions = new Dictionary<int, Button>();
         public Form1()
         {
@@ -23,7 +22,7 @@ namespace TicTacToeDesktopUI
                 playerOptions.Add(i, button);
                 flowLayoutPanel1.Controls.Add(button);
             } 
-            _gameLogic = new Class1();
+            _gameLogic = new GameLogic();
             _gameLogic.AddPlayer(new Player { PlayerIndex = 0, PieceKey = "O" });
             _gameLogic.AddPlayer(new Player { PlayerIndex = 1, PieceKey = "X" });
             Size = new Size(20 + _gameLogic.TileWidth * 100, 20 + _gameLogic.TileHeight * 100);
@@ -106,12 +105,5 @@ namespace TicTacToeDesktopUI
         }
         private delegate void OnVoidMethod<T>(T param1);
     }
-    public class Move : IMove<IPlayer>
-    {
-        public int ColumnIndex { get; set; }
 
-        public IPlayer Player { get; set; }
-
-        public int RowIndex { get; set; }
-    }
 }
